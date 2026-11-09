@@ -6,6 +6,7 @@
 
 bool js_init(void);
 bool js_reset(void);
+const char *js_init_error(void);
 void js_shutdown(void);
 
 /* Выполняет скрипт. print() и текст ошибки пишутся в out. */

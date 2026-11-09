@@ -5,6 +5,12 @@
 #include <string.h>
 
 static duk_context *ctx = NULL;
+static char initErr[300] = "";
+
+const char *js_init_error(void)
+{
+    return initErr;
+}
 
 static char *g_out = NULL;
 static size_t g_outSize = 0;
@@ -44,9 +50,12 @@ void js_shutdown(void)
 
 bool js_init(void)
 {
+    initErr[0] = '\0';
     ctx = duk_create_heap_default();
-    if (!ctx)
+    if (!ctx) {
+        snprintf(initErr, sizeof initErr, "duk_create_heap_default failed");
         return false;
+    }
 
     duk_push_c_function(ctx, native_print, DUK_VARARGS);
     duk_put_global_string(ctx, "print");
@@ -54,6 +63,7 @@ bool js_init(void)
 
     char out[256];
     if (!js_run(PRELUDE_JS, out, sizeof out)) {
+        snprintf(initErr, sizeof initErr, "prelude: %s", out);
         js_shutdown();
         return false;
     }

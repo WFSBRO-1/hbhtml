@@ -90,7 +90,7 @@ int main(int argc, char **argv)
     char status[MSG_MAX] = "";
     bool inGame = false;
     if (!jsOk)
-        snprintf(status, sizeof status, "JS init failed\n");
+        snprintf(status, sizeof status, "JS init failed:\n%s\n", js_init_error());
     draw(status);
 
     while (aptMainLoop()) {

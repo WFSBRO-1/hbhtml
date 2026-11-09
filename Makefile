@@ -5,7 +5,7 @@ BUILD    := build
 SOURCES  := .
 INCLUDES := .
 ARCH     := -march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
-ICON     := icon.png
+ICON     := icon-1.png
 
 LIBDIRS  := $(DEVKITPRO)/libctru
 INCLUDE  := $(foreach dir,$(LIBDIRS),-I$(dir)/include)

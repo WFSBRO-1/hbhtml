@@ -9,7 +9,7 @@
 #include "input_map.h"
 #include "js_runtime.h"
 
-#define MSG_MAX 600
+#define MSG_MAX 1024
 
 static PrintConsole topCon;
 static PrintConsole botCon;

@@ -5,7 +5,7 @@
 #include <string.h>
 
 static duk_context *ctx = NULL;
-static char initErr[300] = "";
+static char initErr[900] = "";
 
 const char *js_init_error(void)
 {
@@ -48,6 +48,38 @@ void js_shutdown(void)
     }
 }
 
+
+/* Прогоняет маленькие команды по одной, чтобы понять, какая ломается. */
+static void run_selftest(char *dst, size_t n)
+{
+    static const char *snips[] = {
+        "1+1",
+        "var a0 = 0;",
+        "var a1 = {};",
+        "var a2 = [];",
+        "var a3 = [1, 2];",
+        "var a4 = []; a4.push(1);",
+        "var a5 = new Array();",
+        "var a6 = 'x'.charAt(0);",
+        "var a7 = parseInt('16', 16);",
+        "var a8 = Math.floor(2.5);",
+    };
+    size_t len = strlen(dst);
+    for (unsigned i = 0; i < sizeof snips / sizeof snips[0]; i++) {
+        char o[120];
+        bool ok = js_run(snips[i], o, sizeof o);
+        char line[120];
+        for (char *p = o; *p; p++)
+            if (*p == '\n') *p = ' ';
+        snprintf(line, sizeof line, "%u %s %.30s\n", i, ok ? "ok" : "ERR", o);
+        size_t l = strlen(line);
+        if (len + l + 1 >= n)
+            break;
+        memcpy(dst + len, line, l + 1);
+        len += l;
+    }
+}
+
 bool js_init(void)
 {
     initErr[0] = '\0';
@@ -63,7 +95,8 @@ bool js_init(void)
 
     char out[256];
     if (!js_run(PRELUDE_JS, out, sizeof out)) {
-        snprintf(initErr, sizeof initErr, "prelude: %s", out);
+        snprintf(initErr, sizeof initErr, "prelude: %s\n--- selftest ---\n", out);
+        run_selftest(initErr, sizeof initErr);
         js_shutdown();
         return false;
     }

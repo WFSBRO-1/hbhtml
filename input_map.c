@@ -1,5 +1,5 @@
 #include "input_map.h"
-#include <stdio.h>
+#include "js_runtime.h"
 
 static KeyBinding bindings[] = {
     { KEY_DUP,    "ArrowUp",    38 },
@@ -17,19 +17,14 @@ static KeyBinding bindings[] = {
 };
 #define NB (sizeof(bindings) / sizeof(bindings[0]))
 
-static void emit(const char *type, const char *code, int keyCode)
-{
-    printf("%s %s (%d)\n", type, code, keyCode);
-}
-
 void input_init(void) {}
 
 void input_dispatch(u32 down, u32 up)
 {
     for (size_t i = 0; i < NB; i++) {
         if (down & bindings[i].hid)
-            emit("keydown", bindings[i].code, bindings[i].keyCode);
+            js_dispatch_key("keydown", bindings[i].code, bindings[i].keyCode);
         if (up & bindings[i].hid)
-            emit("keyup",   bindings[i].code, bindings[i].keyCode);
+            js_dispatch_key("keyup", bindings[i].code, bindings[i].keyCode);
     }
 }

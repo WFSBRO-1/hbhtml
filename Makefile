@@ -6,10 +6,14 @@ SOURCES  := .
 INCLUDES := .
 ARCH     := -march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
 
-CFLAGS   := -g -Wall -O2 -mword-relocations -ffunction-sections $(ARCH) \
-            $(addprefix -I,$(INCLUDES))
+LIBDIRS  := $(LIBCTRU)
+INCLUDE  := $(foreach dir,$(LIBDIRS),-I$(dir)/include)
+LIBPATHS := $(foreach dir,$(LIBDIRS),-L$(dir)/lib)
+
+CFLAGS   := -g -Wall -O2 -mword-relocations -ffunction-sections -D__3DS__ \
+            $(ARCH) $(INCLUDE) $(addprefix -I,$(INCLUDES))
 CXXFLAGS := $(CFLAGS) -fno-rtti -fno-exceptions
-LDFLAGS  := -specs=3dsx.specs -g $(ARCH)
+LDFLAGS  := -specs=3dsx.specs -g $(ARCH) $(LIBPATHS)
 LIBS     := -lctru -lm
 
 CFILES   := $(foreach d,$(SOURCES),$(wildcard $(d)/*.c))

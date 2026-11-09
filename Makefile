@@ -5,6 +5,7 @@ BUILD    := build
 SOURCES  := .
 INCLUDES := .
 ARCH     := -march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
+ICON     := icon.png
 
 LIBDIRS  := $(DEVKITPRO)/libctru
 INCLUDE  := $(foreach dir,$(LIBDIRS),-I$(dir)/include)
@@ -31,10 +32,13 @@ $(BUILD)/%.o: %.c
 $(TARGET).elf: $(OBJS)
 	$(CC) $(LDFLAGS) $^ $(LIBS) -o $@
 
-$(TARGET).3dsx: $(TARGET).elf
-	3dsxtool $< $@
+$(TARGET).smdh: $(ICON)
+	smdhtool --create "HB HTML" "HTML runtime" "WFSBRO" $(ICON) $@
+
+$(TARGET).3dsx: $(TARGET).elf $(TARGET).smdh
+	3dsxtool $< $@ --smdh=$(TARGET).smdh
 
 clean:
-	rm -rf $(BUILD) $(TARGET).elf $(TARGET).3dsx
+	rm -rf $(BUILD) $(TARGET).elf $(TARGET).3dsx $(TARGET).smdh
 
 .PHONY: all clean

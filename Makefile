@@ -6,7 +6,7 @@ SOURCES  := .
 INCLUDES := .
 ARCH     := -march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
 
-LIBDIRS  := $(LIBCTRU)
+LIBDIRS  := $(DEVKITPRO)/libctru
 INCLUDE  := $(foreach dir,$(LIBDIRS),-I$(dir)/include)
 LIBPATHS := $(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 

@@ -4,7 +4,7 @@ TARGET   := hbhtml
 BUILD    := build
 SOURCES  := .
 INCLUDES := .
-ARCH     := -march=mpcore -mfloat-abi=hard -mtp=soft
+ARCH     := -march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
 
 CFLAGS   := -g -Wall -O2 -mword-relocations -ffunction-sections $(ARCH) \
             $(addprefix -I,$(INCLUDES))

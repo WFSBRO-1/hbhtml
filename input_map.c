@@ -8,6 +8,8 @@ static KeyBinding bindings[] = {
     { KEY_DRIGHT, "ArrowRight", 39 },
     { KEY_A,      "KeyZ",       90 },
     { KEY_B,      "KeyX",       88 },
+    { KEY_X,      "KeyS",       83 },
+    { KEY_Y,      "KeyA",       65 },
     { KEY_START,  "Enter",      13 },
     { KEY_SELECT, "ShiftRight", 16 },
     { KEY_L,      "KeyQ",       81 },
